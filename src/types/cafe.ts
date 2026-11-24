@@ -21,12 +21,40 @@ export type MoodTag = '平靜' | '充實' | '靈感' | '微累' | '咖啡續命�
 
 export interface MoodNote {
   id: string;
+  uid?: string;
+  authorDisplay?: string;
   content: string;
   mood: MoodTag;
   color: NoteColorId;
   focusMinutes: number;
   ambienceLabel: string;
   createdAt: string;
+  createdAtMs?: number;
+}
+
+export interface CafeProfile {
+  uid: string;
+  roomId: 'main-cafe';
+  nickname: string;
+  portion: string;
+  flavor: string;
+  item: string;
+  totalFocusMinutes: number;
+  isFocusing: boolean;
+  ambienceLabel: string;
+  updatedAtMs?: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  uid: string;
+  roomId: 'main-cafe';
+  authorName: string;
+  authorRecipe: string;
+  text: string;
+  messageType: 'chat' | 'unlock';
+  createdAtLabel: string;
+  createdAtMs: number;
 }
 
 export const AMBIENCE_OPTIONS: AmbienceOption[] = [
@@ -107,29 +135,32 @@ export const PRESET_MINUTES = [15, 25, 45, 60];
 export const STARTER_NOTES: MoodNote[] = [
   {
     id: 'starter-1',
+    authorDisplay: '晨光旅人/[一杯][微苦]的[卡布奇諾]',
     content: '窗外下著細雨，剛讀完第三章筆記，熱拿鐵的溫度剛剛好。',
     mood: '平靜',
     color: 'butter',
     focusMinutes: 25,
     ambienceLabel: '雨天窗畔',
-    createdAt: '今天 09:45',
+    createdAt: '範例便條',
   },
   {
     id: 'starter-2',
+    authorDisplay: '書頁貓咪/[一盤][香醇]的[抹茶巴斯克]',
     content: '把最難的那份架構圖拆解完畢，心裡踏實了許多，繼續下一輪！',
     mood: '充實',
     color: 'matcha',
     focusMinutes: 45,
     ambienceLabel: '晨間琴聲',
-    createdAt: '今天 11:20',
+    createdAt: '範例便條',
   },
   {
     id: 'starter-3',
+    authorDisplay: '手沖詩人/[手沖][微甜]的[肉桂捲]',
     content: '突然想到一個超棒的解法，趕緊記下來，先去續杯冰美式。',
     mood: '靈感',
     color: 'apricot',
     focusMinutes: 25,
     ambienceLabel: '義式吧檯',
-    createdAt: '今天 14:10',
+    createdAt: '範例便條',
   },
 ];

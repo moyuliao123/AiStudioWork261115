@@ -11,6 +11,7 @@ import {
 interface MoodWallProps {
   notes: MoodNote[];
   totalFocusMinutes: number;
+  currentUid?: string | null;
   onDeleteNote: (id: string) => void;
   onClearAll: () => void;
   onFocusComposer: () => void;
@@ -19,6 +20,7 @@ interface MoodWallProps {
 export const MoodWall: React.FC<MoodWallProps> = ({
   notes,
   totalFocusMinutes,
+  currentUid,
   onDeleteNote,
   onClearAll,
   onFocusComposer,
@@ -56,7 +58,7 @@ export const MoodWall: React.FC<MoodWallProps> = ({
         </div>
 
         {/* One-Click Clear All with Safe Inline Confirmation */}
-        {notes.length > 0 && (
+        {(currentUid ? notes.some((n) => n.uid === currentUid) : notes.length > 0) && (
           <div className="flex items-center gap-2 shrink-0">
             {!confirmClear ? (
               <button
@@ -65,12 +67,12 @@ export const MoodWall: React.FC<MoodWallProps> = ({
                 className="h-10 px-4 rounded-xl bg-[#FFF1F2] hover:bg-[#FFE4E6] text-[#BE123C] border border-[#FECDD3] text-sm font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
-                <span>一鍵清空</span>
+                <span>{currentUid ? '清空我的便條' : '一鍵清空'}</span>
               </button>
             ) : (
               <div className="flex items-center gap-2 bg-[#FFF1F2] border border-[#FECDD3] rounded-xl p-1.5">
                 <span className="text-xs font-medium text-[#9F1239] pl-2 whitespace-nowrap">
-                  確定清空全部？
+                  {currentUid ? '確定清空我的便條？' : '確定清空全部？'}
                 </span>
                 <button
                   type="button"
@@ -183,14 +185,16 @@ export const MoodWall: React.FC<MoodWallProps> = ({
                     <span className="text-xs font-semibold text-[#44403C]">
                       {note.mood}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => onDeleteNote(note.id)}
-                      aria-label="刪除這張便條"
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-[#78716C] hover:text-[#1C1917] hover:bg-black/5 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity cursor-pointer"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+                    {(!currentUid || !note.uid || note.uid === currentUid) && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteNote(note.id)}
+                        aria-label="刪除這張便條"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-[#78716C] hover:text-[#1C1917] hover:bg-black/5 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
 
                   {/* Handwritten-feel Quote Body */}
@@ -199,12 +203,19 @@ export const MoodWall: React.FC<MoodWallProps> = ({
                   </p>
 
                   {/* Clean Unboxed Metadata Footer */}
-                  <div className="mt-4 pt-3 border-t border-black/10 flex flex-wrap items-center gap-1.5 text-xs text-[#57534E] font-mono-tabular">
-                    <span>專注 {note.focusMinutes} 分鐘</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{note.ambienceLabel}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{note.createdAt}</span>
+                  <div className="mt-4 pt-3 border-t border-black/10 space-y-1 text-xs text-[#57534E]">
+                    {note.authorDisplay && (
+                      <div className="font-medium text-[#292524] break-all">
+                        {note.authorDisplay}
+                      </div>
+                    )}
+                    <div className="flex flex-wrap items-center gap-1.5 font-mono-tabular">
+                      <span>專注 {note.focusMinutes} 分鐘</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{note.ambienceLabel}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{note.createdAt}</span>
+                    </div>
                   </div>
                 </motion.article>
               );

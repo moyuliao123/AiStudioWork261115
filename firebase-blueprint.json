@@ -1,0 +1,221 @@
+{
+  "entities": {
+    "CafeProfile": {
+      "title": "CafeProfile",
+      "description": "Public café study profile storing the user's nickname, equipped specialty coffee/treat combination, and accumulated focus minutes.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the patron."
+        },
+        "roomId": {
+          "type": "string",
+          "enum": ["main-cafe"],
+          "description": "Public café room identifier."
+        },
+        "nickname": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "description": "Patron display nickname."
+        },
+        "portion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16,
+          "description": "Unlocked portion/vessel token."
+        },
+        "flavor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16,
+          "description": "Unlocked flavor/texture token."
+        },
+        "item": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Unlocked coffee specialty or cafe treat."
+        },
+        "totalFocusMinutes": {
+          "type": "number",
+          "description": "Accumulated focus duration in minutes."
+        },
+        "isFocusing": {
+          "type": "boolean",
+          "description": "Whether the patron currently has an active focus timer running."
+        },
+        "ambienceLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Currently selected cafe ambience."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last profile update."
+        }
+      },
+      "required": [
+        "uid",
+        "roomId",
+        "nickname",
+        "portion",
+        "flavor",
+        "item",
+        "totalFocusMinutes",
+        "isFocusing",
+        "ambienceLabel",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "MoodNote": {
+      "title": "MoodNote",
+      "description": "A mood sticky note posted to the shared café wall after focusing.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Author Firebase Auth UID."
+        },
+        "roomId": {
+          "type": "string",
+          "enum": ["main-cafe"],
+          "description": "Shared café wall identifier."
+        },
+        "authorDisplay": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Formatted author title such as 喵喵王子/[一杯][微苦]的[卡布奇諾]."
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Mood sticky note text."
+        },
+        "mood": {
+          "type": "string",
+          "enum": ["平靜", "充實", "靈感", "微累", "咖啡續命中"],
+          "description": "Mood category tag."
+        },
+        "color": {
+          "type": "string",
+          "enum": ["butter", "apricot", "matcha", "sky", "rose"],
+          "description": "Sticky note paper color theme."
+        },
+        "focusMinutes": {
+          "type": "number",
+          "description": "Minutes focused during the session."
+        },
+        "ambienceLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Ambience used during the session."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the note was posted."
+        }
+      },
+      "required": [
+        "uid",
+        "roomId",
+        "authorDisplay",
+        "content",
+        "mood",
+        "color",
+        "focusMinutes",
+        "ambienceLabel",
+        "createdAt"
+      ]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A live text chat message or specialty unlock announcement in the café.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Sender Firebase Auth UID."
+        },
+        "roomId": {
+          "type": "string",
+          "enum": ["main-cafe"],
+          "description": "Chat room identifier."
+        },
+        "authorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "description": "Sender nickname."
+        },
+        "authorRecipe": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Formatted specialty combo like [一杯][微苦]的[卡布奇諾]."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Chat message body."
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["chat", "unlock"],
+          "description": "Distinguishes regular chat messages from specialty unlock celebrations."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when sent."
+        }
+      },
+      "required": [
+        "uid",
+        "roomId",
+        "authorName",
+        "authorRecipe",
+        "text",
+        "messageType",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/cafeProfiles/{userId}": {
+      "schema": { "$ref": "#/entities/CafeProfile" },
+      "description": "Public café profiles of authenticated patrons (no PII stored)."
+    },
+    "/moodNotes/{noteId}": {
+      "schema": { "$ref": "#/entities/MoodNote" },
+      "description": "Shared café mood sticky note wall entries."
+    },
+    "/chatMessages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Live café study chat messages."
+    }
+  }
+}
