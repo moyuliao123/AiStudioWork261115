@@ -144,7 +144,7 @@ export const CafeLoungePanel: React.FC<CafeLoungePanelProps> = ({
         <div className="py-12 text-center text-sm text-[#78716C]">
           正在連線咖啡廳大廳...
         </div>
-      ) : !currentUid || !myProfile ? (
+      ) : !currentUid ? (
         /* Signed-Out Welcome & Preview */
         <div className="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           <div className="lg:col-span-7 space-y-4">
@@ -200,6 +200,10 @@ export const CafeLoungePanel: React.FC<CafeLoungePanelProps> = ({
               </div>
             </div>
           </div>
+        </div>
+      ) : !myProfile ? (
+        <div className="py-12 text-center text-sm text-[#78716C]">
+          正在準備您的咖啡廳名片...
         </div>
       ) : (
         /* Signed-In Multiplayer Workspace */

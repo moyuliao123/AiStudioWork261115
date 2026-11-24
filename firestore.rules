@@ -205,7 +205,7 @@ service cloud.firestore {
 
     // Public café patron profiles (zero PII)
     match /cafeProfiles/{userId} {
-      allow get: if isSignedIn() && isValidId(userId) && existing().roomId == 'main-cafe';
+      allow get: if isSignedIn() && isValidId(userId) && (request.auth.uid == userId || (resource != null && existing().roomId == 'main-cafe'));
       allow list: if isSignedIn() && existing().roomId == 'main-cafe';
       allow create: if isVerifiedUser()
         && isValidId(userId)
