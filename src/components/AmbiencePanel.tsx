@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Volume2, VolumeX, Coffee } from 'lucide-react';
 import { AMBIENCE_OPTIONS, AmbienceId } from '../types/cafe';
+import cafeStudyWindowImg from '../assets/images/cafe_study_window_1795548733330.jpg';
 
 interface AmbiencePanelProps {
   selectedAmbience: AmbienceId;
@@ -10,8 +11,6 @@ interface AmbiencePanelProps {
   onChangeVolume: (vol: number) => void;
   onToggleAudioPreview: () => void;
 }
-
-const CAFE_IMAGE_PATH = '/src/assets/images/cafe_study_window_1795548733330.jpg';
 
 export const AmbiencePanel: React.FC<AmbiencePanelProps> = ({
   selectedAmbience,
@@ -32,7 +31,7 @@ export const AmbiencePanel: React.FC<AmbiencePanelProps> = ({
       <div className="relative h-36 sm:h-40 rounded-xl overflow-hidden mb-5 bg-[#F3EFE6]">
         {!imageError ? (
           <img
-            src={CAFE_IMAGE_PATH}
+            src={cafeStudyWindowImg}
             alt="陽光灑落的咖啡館木窗與手沖咖啡桌"
             referrerPolicy="no-referrer"
             onError={() => setImageError(true)}

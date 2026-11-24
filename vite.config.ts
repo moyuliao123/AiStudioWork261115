@@ -3,12 +3,17 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import {defineConfig} from 'vite';
+import {viteSingleFile} from 'vite-plugin-singlefile';
 
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
+  const isSingleFile = mode === 'single';
+
   return {
+    base: './',
     plugins: [
       react(),
       tailwindcss(),
+      ...(isSingleFile ? [viteSingleFile()] : []),
       // Copies src/assets into dist/ so root-relative URLs like
       // "/src/assets/images/..." (e.g. generate_image output) still resolve
       // in production builds. Do not remove.
@@ -16,7 +21,7 @@ export default defineConfig(() => {
         name: 'copy-unbundled-src-assets',
         apply: 'build',
         closeBundle(error?: Error): void {
-          if (error) {
+          if (error || isSingleFile) {
             return;
           }
           const distDir = path.resolve(__dirname, 'dist');
@@ -28,6 +33,10 @@ export default defineConfig(() => {
         },
       },
     ],
+    build: {
+      outDir: isSingleFile ? 'dist-single' : 'dist',
+      assetsInlineLimit: isSingleFile ? 100_000_000 : 4096,
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
