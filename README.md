@@ -23,8 +23,8 @@
    git push -u origin main
    ```
 2. 前往 GitHub 專案頁面的 **Settings → Pages**。
-3. 在 **Build and deployment → Source** 選擇 **GitHub Actions**。
-4. 等待數十秒自動部署完成，即可透過 `https://<你的帳號>.github.io/<你的專案名稱>/` 開啟使用！
+3. 在 **Build and deployment → Source** 務必選擇 **GitHub Actions**（不可選 `Deploy from a branch`，否則 GitHub 會直接載入未編譯的 `index.html` 導致畫面一片空白）。
+4. 到專案上方的 **Actions** 分頁確認 `Deploy to GitHub Pages` 顯示綠色勾勾，完成後即可透過 `https://<你的帳號>.github.io/<你的專案名稱>/` 開啟使用！
    - 同時在網站網址後方加上 `/cafe-focus-standalone.html` 也能直接下載單一離線 HTML 檔。
 
 ## 方式二：打包成 CyberChef 風格單一 HTML 檔
