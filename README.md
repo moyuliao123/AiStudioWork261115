@@ -32,7 +32,7 @@
 在本機執行：
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 npm run build:single
 ```
 
