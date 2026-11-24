@@ -1,0 +1,6 @@
+{
+  "name": "晨光咖啡讀書室 — 專注計時與心情便條牆",
+  "description": "結合咖啡廳環境音效、專注倒數計時器與心情便條牆的溫暖讀書空間，支援全螢幕沉浸操作。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
